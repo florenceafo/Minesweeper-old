@@ -44,9 +44,9 @@ ex3 =  Grid [
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 1 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 1 True,Bomb,Blank 1 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 1 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
+  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
+  [Blank 0 True,Blank 0 True,Blank 0 True,Bomb,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
+  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True]
@@ -94,6 +94,14 @@ showGrid (Grid g) = mapM_ (putStrLn.unwords.map showCell) g
     showCell (Blank i True) = show i
     showCell _              = "_"
 
+-- prints the Grid in the console
+showGrid' :: Grid -> IO()
+showGrid' (Grid g) = mapM_ (putStrLn.unwords.map showCell) g
+  where 
+    --Decides how to print cells
+    showCell :: Cell -> String
+    showCell (Blank i _) = show i
+    showCell Bomb              = "*"
 
 -- property to test if the grid is valid
 -- if the Grid is square
@@ -113,10 +121,57 @@ prop_validGrid grid = isSquare grid && withinRange grid
         lengthAllRows g' = [length x | x <- g']
 
 -- returns a nested list of the locations of all bombs
-detectAllBombs :: Grid -> [[Int]] 
-detectAllBombs grid = [ elemIndices Bomb x | x <- grid']  
+--detectAllBombs :: Grid -> [(Int,Int)] 
+detectAllBombs grid = concat [ if grid' !! y !! x == Bomb then [(x,y)] else [] | x <- [0..8], y <- [0..8]]  
   where 
     grid' = rows grid
     update row 0 = Bomb : add (row !! 1 ) : drop 8 row
     add Bomb = Bomb
     add (Blank n c) = Blank (n+1) c 
+
+prop_detectAllBombs :: Grid -> Bool
+prop_detectAllBombs grid = undefined 
+
+-- updates adjacent cells with an increased count
+-- only attempts to change bombs, not surrounding cells
+-- updateWithBombs :: Grid -> [(Int, Int)] -> Grid
+updateWithBombs :: Grid -> [(Int, Int)] -> Grid
+updateWithBombs grid [] = grid
+updateWithBombs grid ((col, row):rest) = updateWithBombs 
+  (removeBorder $ Grid $ startRow ++ [above, middle, below] ++ endRow ) 
+  rest
+  where 
+    grid' = rows (addBorder grid)
+    -- row before the row with the current bomb
+    startRow = take (row) grid' 
+    -- row after the row with the current bomb
+    endRow = drop (row + 3) grid'
+    -- update the row with the current bomb
+    above = addBombsNumbers (grid' !! row) (col+1)
+    middle = addBombsNumbers (grid' !! (row+1)) (col+1)
+    below = addBombsNumbers (grid' !! (row+2)) (col+1)
+    addBombsNumbers r colIndex = take (colIndex-1) r ++ 
+             [increaseBombCount $ r !! (colIndex-1),
+             increaseBombCount $ r !! colIndex,
+             increaseBombCount $ r !! (colIndex+1)]  
+             ++ drop (colIndex + 2) r 
+
+addBorder :: Grid -> Grid
+addBorder grid = Grid $ [replicate (l+2) (Blank 0 False)] ++ 
+                  [ [(Blank 0 False)]++x++[(Blank 0 False)] | x <- grid']
+                  ++ [replicate (l+2) (Blank 0 False)]
+  where
+    grid' = rows grid
+    l = length grid'
+
+removeBorder :: Grid -> Grid
+removeBorder grid = Grid $ [ (tail . init) x| x <- (tail . init) grid']
+  where
+    grid' = rows grid
+    l = length grid'
+
+-- Update the Blank cell with the number of bombs surrounding it
+-- Ignores cells that are Bombs
+increaseBombCount :: Cell -> Cell
+increaseBombCount (Blank i c) = Blank (i+1) c
+increaseBombCount  Bomb       = Bomb
