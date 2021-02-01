@@ -85,3 +85,29 @@ allBlankGrid i = Grid [[Blank 0 False | _ <- [1..j]] | _ <- [1..j]]
 prop_allBlankGrid :: Grid -> Bool
 prop_allBlankGrid grid = all (== Blank 0 False) $ concat $ rows grid
 
+-- prints the Grid in the console
+showGrid :: Grid -> IO()
+showGrid (Grid g) = mapM_ (putStrLn.unwords.map showCell) g
+  where 
+    --Decides how to print cells
+    showCell :: Cell -> String
+    showCell (Blank i True) = show i
+    showCell _              = "_"
+
+
+-- property to test if the grid is valid
+-- if the Grid is square
+prop_validGrid :: Grid -> Bool
+prop_validGrid grid = isSquare grid && withinRange grid
+
+  where 
+    g' = rows grid
+
+    withinRange :: Grid -> Bool
+    withinRange g = length g' >= 5 && length g' <= 10
+
+    isSquare :: Grid -> Bool
+    isSquare g =  all (==lengthCol) (lengthAllRows g')
+      where 
+        lengthCol = length g'
+        lengthAllRows g' = [length x | x <- g']
