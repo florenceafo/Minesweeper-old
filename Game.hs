@@ -120,14 +120,13 @@ prop_validGrid grid = isSquare grid && withinRange grid
         lengthCol = length g'
         lengthAllRows g' = [length x | x <- g']
 
--- returns a nested list of the locations of all bombs
---detectAllBombs :: Grid -> [(Int,Int)] 
-detectAllBombs grid = concat [ if grid' !! y !! x == Bomb then [(x,y)] else [] | x <- [0..8], y <- [0..8]]  
+-- returns a nested list of the locations of all bombs 
+detectAllBombs :: Grid -> [(Int, Int)]
+detectAllBombs grid = concat $ 
+  filter (not . null) 
+  [ zip (elemIndices Bomb x ) [0..length grid' -1]  |  x <- grid']
   where 
     grid' = rows grid
-    update row 0 = Bomb : add (row !! 1 ) : drop 8 row
-    add Bomb = Bomb
-    add (Blank n c) = Blank (n+1) c 
 
 prop_detectAllBombs :: Grid -> Bool
 prop_detectAllBombs grid = undefined 
@@ -165,7 +164,7 @@ addBorder grid = Grid $ [replicate (l+2) (Blank 0 False)] ++
     l = length grid'
 
 removeBorder :: Grid -> Grid
-removeBorder grid = Grid $ [ (tail . init) x| x <- (tail . init) grid']
+removeBorder grid = Grid $ [ (tail . init) x | x <- (tail . init) grid']
   where
     grid' = rows grid
     l = length grid'
@@ -175,3 +174,5 @@ removeBorder grid = Grid $ [ (tail . init) x| x <- (tail . init) grid']
 increaseBombCount :: Cell -> Cell
 increaseBombCount (Blank i c) = Blank (i+1) c
 increaseBombCount  Bomb       = Bomb
+
+
