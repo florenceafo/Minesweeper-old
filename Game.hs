@@ -59,6 +59,17 @@ ex4 = Grid  [
             ]
 
 
+--- creates an arbitrary Grid
+instance Arbitrary Grid where
+  arbitrary = fmap Grid (vectorOf 10 (vectorOf 10 cell))
+
+-- generates an arbitrary cell in a Minesweeper grid
+cell :: Gen Cell
+cell = frequency [(3, emptyCell), (1, bomb)]
+  where 
+    emptyCell = elements [Blank 0 False]
+    bomb = return Bomb
+
 -- creates a blank Grid with the height and width of the given Integer
 -- Implements a maximum size of 10 x 10 and a minimum size of 5 x 5
 allBlankGrid :: Int -> Grid
