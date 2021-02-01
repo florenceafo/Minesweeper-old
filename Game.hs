@@ -111,3 +111,12 @@ prop_validGrid grid = isSquare grid && withinRange grid
       where 
         lengthCol = length g'
         lengthAllRows g' = [length x | x <- g']
+
+-- returns a nested list of the locations of all bombs
+detectAllBombs :: Grid -> [[Int]] 
+detectAllBombs grid = [ elemIndices Bomb x | x <- grid']  
+  where 
+    grid' = rows grid
+    update row 0 = Bomb : add (row !! 1 ) : drop 8 row
+    add Bomb = Bomb
+    add (Blank n c) = Blank (n+1) c 
