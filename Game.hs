@@ -4,7 +4,9 @@ import Test.QuickCheck
 import Data.List
 
 import System.Random
+import RunGame
 import Grid
+
 
 
   
@@ -147,6 +149,12 @@ updateWithBombs grid ((col, row):rest) = updateWithBombs
              increaseBombCount $ r !! (colIndex+1)]  
              ++ drop (colIndex + 2) r 
 
+-- Update the Blank cell with the number of bombs surrounding it
+-- Ignores cells that are Bombs
+increaseBombCount :: Cell -> Cell
+increaseBombCount (Blank i c) = Blank (i+1) c
+increaseBombCount  (Bomb c)     = Bomb c
+
 addBorder :: Grid -> Grid
 addBorder grid = Grid $ [replicate (l+2) (Blank 0 False)] ++ 
                   [ [(Blank 0 False)]++x++[(Blank 0 False)] | x <- grid']
@@ -161,15 +169,11 @@ removeBorder grid = Grid $ [ (tail . init) x | x <- (tail . init) grid']
     grid' = rows grid
     l = length grid'
 
--- Update the Blank cell with the number of bombs surrounding it
--- Ignores cells that are Bombs
-increaseBombCount :: Cell -> Cell
-increaseBombCount (Blank i c) = Blank (i+1) c
-increaseBombCount  (Bomb c)     = Bomb c
 
--- addBombs :: Int -> Grid -> IO Grid()
+
+-- adds bombs to a blank grid, given an integer
 addBombs :: Int -> Grid -> IO Grid
-addBombs 0 grid = return $ grid
+addBombs 0 grid = return grid
 addBombs i grid = do 
   g <- newStdGen 
   let (grid', seed) = insertBombs g (rows grid)
@@ -177,19 +181,17 @@ addBombs i grid = do
 
 -- given a grid and an integer, returns a Grid with bombs inserted
 -- to be added: integer is the ratio of Blanks to Bombs, with Bombs always being one
---insertBombs :: Grid -> Int -> Grid
---insertBombs :: Grid -> Int -> IO Int
+-- insertBombs :: Grid -> Int -> Grid
+-- insertBombs :: Grid -> Int -> IO Int
 insertBombs :: RandomGen g => g -> [Row]-> (Grid, g)
 insertBombs g grid = do
   let (r,s) = getRandomNumber g n
   let pre = take r $ concat grid
   let post = drop (r+1) $ concat grid
   let newGrid = Grid $ splitIntoSublist l ( pre ++ [Bomb False] ++ post )
-  --print newGrid
   (newGrid, s) 
   where 
     n = length ( concat grid) - 1
-    --grid = rows grid
     l = length grid
     splitIntoSublist n list 
       | n <= 0 || null list = []
@@ -208,16 +210,15 @@ gameOver :: Grid -> Bool
 gameOver grid = elem (Bomb True) (concat grid')
   where grid' = rows grid
 
--- implementation = Interface
---   { iAllBlankGrid = allBlankGrid,
---     iShowGrid = showGrid,
---     iUpdateWithBombs = updateWithBombs
---     -- iGameOver = gameOver,
---     -- iWinner = winner,
---     -- iDraw = draw,
---     -- iPlayBank = playBank,
---     -- iShuffle = shuffleDeck
---   }
+score :: Grid -> Int 
+score grid = 0
 
--- main :: IO ()
--- main = runGame implementation
+implementation = Interface
+  { iAllBlankGrid    = allBlankGrid,
+    iAddBombs        = addBombs,
+    iScore           = score,  
+    iGameOver        = gameOver,
+    iShowGrid        = showGrid' 
+  }
+
+
