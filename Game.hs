@@ -175,12 +175,6 @@ addBombs i grid = do
   let (grid', seed) = insertBombs g (rows grid)
   addBombs (i-1)  grid'
 
-
--- randomNumGen :: Int ->  IO (Int, StdGen)
--- randomNumGen n = do 
---   g <- newStdGen
---   return $ randomR (0, n - 1) g
-
 -- given a grid and an integer, returns a Grid with bombs inserted
 -- to be added: integer is the ratio of Blanks to Bombs, with Bombs always being one
 --insertBombs :: Grid -> Int -> Grid
