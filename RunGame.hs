@@ -33,5 +33,7 @@ runGame i = do
 gameLoop :: Interface -> Grid -> IO()
 gameLoop i grid = do
   iShowGrid i grid
-  
+  putStrLn "Enter the coordinates of the cell you wish to click on"
+  -- input <- getLine 
+
   

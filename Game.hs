@@ -15,41 +15,44 @@ rows :: Grid -> [Row]
 rows (Grid g) = g
 
 -- example Grids for testing
-ex1, ex2, ex3, ex4 :: Grid
-ex1 = Grid  [
-              [Blank 0 False , Blank 1 False , Blank 0 False ],
-              [Blank 2 False , Bomb False, Blank 3 False ],
-              [Blank 0 False , Blank 4 False , Blank 0 False ]
-            ]
+ex3, ex4 :: Grid
+-- ex1 = Grid  [
+--               [Blank 0 False , Blank 1 False , Blank 0 False ],
+--               [Blank 2 False , Bomb False, Blank 3 False ],
+--               [Blank 0 False , Blank 4 False , Blank 0 False ]
+--             ]
 
-ex2 =  Grid [
-  [Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True],
-  [Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Bomb False,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Bomb False,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Bomb False,Bomb False,Bomb False,Blank 0 True]
-  ]
+-- ex2 =  Grid [
+--   [Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True],
+--   [Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True],
+--   [Bomb False,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True],
+--   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
+--   [Bomb False,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True],
+--   [Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
+--   [Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True],
+--   [Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False],
+--   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Bomb False,Bomb False,Bomb False,Blank 0 True]
+--   ]
 
-ex3 =  Grid [
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True]
-  ]
+ex3 = Grid [
+            [Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False],[
+              Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Bomb False False,Blank 0 False False,Bomb False False,Blank 0 False False],[
+              Blank 0 False False,Bomb False False,Bomb False False,Blank 0 False False,Blank 0 False False,Bomb False False,Blank 0 False False,Bomb False False,Blank 0 False False,Blank 0 False False],[
+              Blank 0 False True,Blank 0 False False,Bomb False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Bomb False False,Bomb False False,Blank 0 False False],[
+              Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Bomb False False,Blank 0 False False],[
+              Bomb False False,Bomb False False,Blank 0 False False,Blank 0 False False,Bomb False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Bomb False False],[
+              Blank 0 False False,Blank 0 False False,Bomb False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Bomb False False,Blank 0 False False,Bomb False False],[
+              Blank 0 False False,Bomb False False,Bomb False False,Blank 0 False False,Blank 0 False False,Bomb False False,Blank 0 False False,Bomb False False,Blank 0 False False,Blank 0 False False],[
+              Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Bomb False False,Blank 0 False False,Blank 0 False False,Bomb False False,Blank 0 False False],
+              [Blank 0 False False,Blank 0 False False,Bomb False False,Bomb False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Blank 0 False False,Bomb False False]
+          ]
+
+
 
 ex4 = Grid  [
-              [Blank 0 False , Blank 0 False , Blank 0 False ],
-              [Blank 0 False , Bomb False, Blank 0 False ],
-              [Blank 0 False , Blank 0 False , Blank 0 False ]
+              [Blank 0 False False , Blank 0 False False , Blank 0 False False ],
+              [Blank 0 False False , Bomb False False, Blank 0 False False ],
+              [Blank 0 False False , Blank 0 False False , Blank 0 False False ]
             ]
 
 
@@ -61,13 +64,13 @@ instance Arbitrary Grid where
 cell :: Gen Cell
 cell = frequency [(3, emptyCell), (1, bomb)]
   where 
-    emptyCell = elements [Blank 0 False]
-    bomb = return (Bomb False)
+    emptyCell = elements [Blank 0 False False]
+    bomb = return (Bomb False False)
 
 -- creates a blank Grid with the height and width of the given Integer
 -- Implements a maximum size of 10 x 10 and a minimum size of 5 x 5
 allBlankGrid :: Int -> Grid
-allBlankGrid i = Grid [[Blank 0 False | _ <- [1..j]] | _ <- [1..j]]
+allBlankGrid i = Grid [[Blank 0 False False | _ <- [1..j]] | _ <- [1..j]]
   where 
     j 
      | i < 5 = 5
@@ -77,7 +80,7 @@ allBlankGrid i = Grid [[Blank 0 False | _ <- [1..j]] | _ <- [1..j]]
 -- checks if the blank grid generated contains all blanks, 
 -- with no bombs or adjacency numbers
 prop_allBlankGrid :: Grid -> Bool
-prop_allBlankGrid grid = all (== Blank 0 False) $ concat $ rows grid
+prop_allBlankGrid grid = all (== Blank 0 False False) $ concat $ rows grid
 
 -- prints the Grid in the console
 showGrid :: Grid -> IO()
@@ -85,7 +88,9 @@ showGrid (Grid g) = mapM_ (putStrLn.unwords.map showCell) g
   where 
     --Decides how to print cells
     showCell :: Cell -> String
-    showCell (Blank i True) = show i
+    showCell (Blank _ _ True) = "⚐"
+    showCell (Bomb _ True) = "⚐"
+    showCell (Blank i True f) = show i
     showCell _              = "_"
 
 -- prints the Grid in the console
@@ -94,8 +99,8 @@ showGrid' (Grid g) = mapM_ (putStrLn.unwords.map showCell) g
   where 
     --Decides how to print cells
     showCell :: Cell -> String
-    showCell (Blank i _) = show i
-    showCell (Bomb _ )            = "*"
+    showCell (Blank i _ _) = show i
+    showCell (Bomb _ _)            = "*"
 
 -- property to test if the grid is valid
 -- if the Grid is square
@@ -123,12 +128,12 @@ prop_validGrid grid = isSquare grid && withinRange grid
 --     grid' = rows grid
  
 detectAllBombs :: Grid -> [(Int, Int)]
-detectAllBombs grid = concat [ ([(x, y) | grid' !! y !! x == Bomb False]) | x <- [0..8], y <- [0..8]]  
+detectAllBombs grid = concat [ ([(x, y) | grid' !! y !! x == Bomb False False]) | x <- [0..8], y <- [0..8]]  
   where 
     grid' = rows grid
-    update row 0 = Bomb False : add (row !! 1 ) : drop 8 row
-    add (Bomb c) = Bomb c
-    add (Blank n c) = Blank (n+1) c 
+    -- update row 0 = Bomb False : add (row !! 1 ) : drop 8 row
+    -- add (Bomb c ) = Bomb c
+    -- add (Blank n c) = Blank (n+1) c 
 
 prop_detectAllBombs :: Grid -> Bool
 prop_detectAllBombs grid = undefined 
@@ -160,13 +165,13 @@ updateWithBombs grid ((col, row):rest) = updateWithBombs
 -- Update the Blank cell with the number of bombs surrounding it
 -- Ignores cells that are Bombs
 increaseBombCount :: Cell -> Cell
-increaseBombCount (Blank i c) = Blank (i+1) c
-increaseBombCount  (Bomb c)     = Bomb c
+increaseBombCount (Blank i c f) = Blank (i+1) c f
+increaseBombCount  (Bomb c f)     = Bomb c f
 
 addBorder :: Grid -> Grid
-addBorder grid = Grid $ [replicate (l+2) (Blank 0 False)] ++ 
-                  [ [(Blank 0 False)]++x++[(Blank 0 False)] | x <- grid']
-                  ++ [replicate (l+2) (Blank 0 False)]
+addBorder grid = Grid $ [replicate (l+2) (Blank 0 False False)] ++ 
+                  [ [(Blank 0 False False)]++x++[(Blank 0 False False)] | x <- grid']
+                  ++ [replicate (l+2) (Blank 0 False False)]
   where
     grid' = rows grid
     l = length grid'
@@ -196,7 +201,7 @@ insertBombs g grid = do
   let (r,s) = getRandomNumber g n
   let pre = take r $ concat grid
   let post = drop (r+1) $ concat grid
-  let newGrid = Grid $ splitIntoSublist l ( pre ++ [Bomb False] ++ post )
+  let newGrid = Grid $ splitIntoSublist l ( pre ++ [Bomb False False] ++ post )
   (newGrid, s) 
   where 
     n = length ( concat grid) - 1
@@ -210,12 +215,19 @@ getRandomNumber g n = randomR (0,n::Int) g
 
 -- updates a cell as clicked on
 clicked :: Cell -> Cell 
-clicked (Blank i False) = Blank i True 
-clicked (Bomb False)    = Bomb True
+clicked (Blank i c True) = Blank i c True
+clicked (Bomb c True) = Bomb c True
+clicked (Blank i False False) = Blank i True False
+clicked (Bomb False False)    = Bomb True False
 clicked cell            = cell
 
+flagged :: Cell -> Cell 
+flagged (Blank i c False) = Blank i c True
+flagged (Bomb c False)    = Bomb c True 
+flagged cell              = cell
+
 gameOver :: Grid -> Bool 
-gameOver grid = elem (Bomb True) (concat grid')
+gameOver grid = elem (Bomb True False) (concat grid')
   where grid' = rows grid
 
 score :: Grid -> Int 
