@@ -115,12 +115,20 @@ prop_validGrid grid = isSquare grid && withinRange grid
         lengthAllRows g' = [length x | x <- g']
 
 -- returns a nested list of the locations of all bombs 
+-- detectAllBombs :: Grid -> [(Int, Int)]
+-- detectAllBombs grid = concat $ 
+--   filter (not . null) 
+--   [ zip (elemIndices (Bomb False) x ) [0..length grid' -1]  |  x <- grid']
+--   where 
+--     grid' = rows grid
+ 
 detectAllBombs :: Grid -> [(Int, Int)]
-detectAllBombs grid = concat $ 
-  filter (not . null) 
-  [ zip (elemIndices (Bomb False) x ) [0..length grid' -1]  |  x <- grid']
+detectAllBombs grid = concat [ ([(x, y) | grid' !! y !! x == Bomb False]) | x <- [0..8], y <- [0..8]]  
   where 
     grid' = rows grid
+    update row 0 = Bomb False : add (row !! 1 ) : drop 8 row
+    add (Bomb c) = Bomb c
+    add (Blank n c) = Blank (n+1) c 
 
 prop_detectAllBombs :: Grid -> Bool
 prop_detectAllBombs grid = undefined 
@@ -218,7 +226,9 @@ implementation = Interface
     iAddBombs        = addBombs,
     iScore           = score,  
     iGameOver        = gameOver,
-    iShowGrid        = showGrid' 
+    iShowGrid        = showGrid',
+    iUpdateWithBombs = updateWithBombs,
+    iDetectAllBombs  = detectAllBombs
   }
 
 

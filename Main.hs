@@ -12,13 +12,7 @@ import System.Random
 main :: IO ()
 main = runGame implementation
 
-data Interface = Interface
-  { iAllBlankGrid    :: Int -> Grid
-  , iUpdateWithBombs :: Grid -> [(Int, Int)] -> Grid
-  , iScore           :: Grid -> Int
-  , iGameOver        :: Grid -> Bool
-  -- , iWins         :: Grid -> Bool
-  }
+
 
 -- runGame :: Interface -> IO()
 -- runGame i = do

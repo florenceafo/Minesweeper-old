@@ -12,6 +12,8 @@ data Interface = Interface
   , iScore           :: Grid -> Int
   , iGameOver        :: Grid -> Bool
   , iShowGrid        :: Grid -> IO()
+  , iUpdateWithBombs :: Grid -> [(Int, Int)] -> Grid
+  , iDetectAllBombs :: Grid -> [(Int, Int)]
   -- , iWins         :: Grid -> Bool
   }
 
@@ -19,16 +21,17 @@ runGame :: Interface -> IO()
 runGame i = do
   putStrLn "Welcome to a new game of minesweeper"
   g <- newStdGen
-  putStrLn "Choose a level between 1 (easy) and 5 (hard)"
+  putStrLn "Choose a level between 5 (easy) and 10 (hard)"
   input <- getLine 
   let l = (read input)
-  currentGrid <- (iAddBombs i l (iAllBlankGrid i 10))
-  gameLoop i  currentGrid
-  -- print g
-
+  currentGrid <- iAddBombs i l (iAllBlankGrid i 10)
+  let bombs = iDetectAllBombs i currentGrid
+  let updatedGrid = iUpdateWithBombs i currentGrid bombs
+  gameLoop i  updatedGrid
 
 
 gameLoop :: Interface -> Grid -> IO()
 gameLoop i grid = do
-  putStrLn "In game loop"
   iShowGrid i grid
+  
+  
