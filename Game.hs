@@ -4,16 +4,8 @@ import Test.QuickCheck
 import Data.List
 
 import System.Random
+import Grid
 
-
-data Grid = Grid [Row]
-  deriving (Show, Eq, Read)
-type Row = [Cell] 
-data Cell = Blank AdjBombs Clicked | Bomb
-  deriving (Show, Eq, Read)
-type AdjBombs = Int -- number of bombs to above, below or either side
-type Flag = Bool -- has the user flagged the cell (right click)
-type Clicked = Bool -- has the user clicked on the cell (left click)
 
   
 -- turns the Grid into a nested list
@@ -24,20 +16,20 @@ rows (Grid g) = g
 ex1, ex2, ex3, ex4 :: Grid
 ex1 = Grid  [
               [Blank 0 False , Blank 1 False , Blank 0 False ],
-              [Blank 2 False , Bomb, Blank 3 False ],
+              [Blank 2 False , Bomb False, Blank 3 False ],
               [Blank 0 False , Blank 4 False , Blank 0 False ]
             ]
 
 ex2 =  Grid [
-  [Blank 0 True,Blank 0 True,Bomb,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb,Blank 0 True],
-  [Bomb,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Bomb,Blank 0 True,Bomb,Blank 0 True,Blank 0 True,Bomb,Blank 0 True,Blank 0 True,Blank 0 True],
+  [Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True],
+  [Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True],
+  [Bomb False,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True],
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Bomb,Bomb,Blank 0 True,Blank 0 True,Blank 0 True,Bomb,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Bomb,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Bomb,Blank 0 True,Blank 0 True,Bomb,Blank 0 True,Bomb,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Bomb,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb,Bomb,Bomb,Bomb,Blank 0 True]
+  [Bomb False,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True],
+  [Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
+  [Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True],
+  [Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False],
+  [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Bomb False,Bomb False,Bomb False,Blank 0 True]
   ]
 
 ex3 =  Grid [
@@ -45,7 +37,7 @@ ex3 =  Grid [
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
-  [Blank 0 True,Blank 0 True,Blank 0 True,Bomb,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
+  [Blank 0 True,Blank 0 True,Blank 0 True,Bomb False,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
   [Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True,Blank 0 True],
@@ -54,7 +46,7 @@ ex3 =  Grid [
 
 ex4 = Grid  [
               [Blank 0 False , Blank 0 False , Blank 0 False ],
-              [Blank 0 False , Bomb, Blank 0 False ],
+              [Blank 0 False , Bomb False, Blank 0 False ],
               [Blank 0 False , Blank 0 False , Blank 0 False ]
             ]
 
@@ -68,7 +60,7 @@ cell :: Gen Cell
 cell = frequency [(3, emptyCell), (1, bomb)]
   where 
     emptyCell = elements [Blank 0 False]
-    bomb = return Bomb
+    bomb = return (Bomb False)
 
 -- creates a blank Grid with the height and width of the given Integer
 -- Implements a maximum size of 10 x 10 and a minimum size of 5 x 5
@@ -101,7 +93,7 @@ showGrid' (Grid g) = mapM_ (putStrLn.unwords.map showCell) g
     --Decides how to print cells
     showCell :: Cell -> String
     showCell (Blank i _) = show i
-    showCell Bomb              = "*"
+    showCell (Bomb _ )            = "*"
 
 -- property to test if the grid is valid
 -- if the Grid is square
@@ -111,7 +103,7 @@ prop_validGrid grid = isSquare grid && withinRange grid
   where 
     g' = rows grid
 
-    withinRange :: Grid -> Bool
+    withinRange :: Grid -> Bool 
     withinRange g = length g' >= 5 && length g' <= 10
 
     isSquare :: Grid -> Bool
@@ -124,7 +116,7 @@ prop_validGrid grid = isSquare grid && withinRange grid
 detectAllBombs :: Grid -> [(Int, Int)]
 detectAllBombs grid = concat $ 
   filter (not . null) 
-  [ zip (elemIndices Bomb x ) [0..length grid' -1]  |  x <- grid']
+  [ zip (elemIndices (Bomb False) x ) [0..length grid' -1]  |  x <- grid']
   where 
     grid' = rows grid
 
@@ -173,6 +165,65 @@ removeBorder grid = Grid $ [ (tail . init) x | x <- (tail . init) grid']
 -- Ignores cells that are Bombs
 increaseBombCount :: Cell -> Cell
 increaseBombCount (Blank i c) = Blank (i+1) c
-increaseBombCount  Bomb       = Bomb
+increaseBombCount  (Bomb c)     = Bomb c
+
+-- addBombs :: Int -> Grid -> IO Grid()
+addBombs :: Int -> Grid -> IO Grid
+addBombs 0 grid = return $ grid
+addBombs i grid = do 
+  g <- newStdGen 
+  let (grid', seed) = insertBombs g (rows grid)
+  addBombs (i-1)  grid'
 
 
+-- randomNumGen :: Int ->  IO (Int, StdGen)
+-- randomNumGen n = do 
+--   g <- newStdGen
+--   return $ randomR (0, n - 1) g
+
+-- given a grid and an integer, returns a Grid with bombs inserted
+-- to be added: integer is the ratio of Blanks to Bombs, with Bombs always being one
+--insertBombs :: Grid -> Int -> Grid
+--insertBombs :: Grid -> Int -> IO Int
+insertBombs :: RandomGen g => g -> [Row]-> (Grid, g)
+insertBombs g grid = do
+  let (r,s) = getRandomNumber g n
+  let pre = take r $ concat grid
+  let post = drop (r+1) $ concat grid
+  let newGrid = Grid $ splitIntoSublist l ( pre ++ [Bomb False] ++ post )
+  --print newGrid
+  (newGrid, s) 
+  where 
+    n = length ( concat grid) - 1
+    --grid = rows grid
+    l = length grid
+    splitIntoSublist n list 
+      | n <= 0 || null list = []
+      | otherwise = take n list : splitIntoSublist n (drop n list)
+
+getRandomNumber :: RandomGen g => g -> Int -> (Int, g)
+getRandomNumber g n = randomR (0,n::Int) g
+
+-- updates a cell as clicked on
+clicked :: Cell -> Cell 
+clicked (Blank i False) = Blank i True 
+clicked (Bomb False)    = Bomb True
+clicked cell            = cell
+
+gameOver :: Grid -> Bool 
+gameOver grid = elem (Bomb True) (concat grid')
+  where grid' = rows grid
+
+-- implementation = Interface
+--   { iAllBlankGrid = allBlankGrid,
+--     iShowGrid = showGrid,
+--     iUpdateWithBombs = updateWithBombs
+--     -- iGameOver = gameOver,
+--     -- iWinner = winner,
+--     -- iDraw = draw,
+--     -- iPlayBank = playBank,
+--     -- iShuffle = shuffleDeck
+--   }
+
+-- main :: IO ()
+-- main = runGame implementation
