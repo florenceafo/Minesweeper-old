@@ -27,6 +27,10 @@ executable game
   main-is:             Main.hs
   other-modules:       Grid, RunGame, Game 
   -- other-extensions:
-  build-depends:       base >=4.12 && <4.13, QuickCheck >=2.12 && <2.13, random >=1.1 && <1.2
-  -- hs-source-dirs:
+  build-depends:       base >=4.12 && <4.13,
+                       QuickCheck >=2.12 && <2.13,
+                       random >=1.1 && <1.2,
+                       threepenny-gui >=0.9.0.0,
+                       aeson >=1.5.4.1
+  -- hs-source-dirs:                    
   default-language:    Haskell2010
