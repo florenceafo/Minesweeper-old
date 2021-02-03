@@ -16,17 +16,51 @@ main = startGUI defaultConfig setup
 
 setup :: Window -> UI ()
 setup window =
+  
   do -- Create them user interface elements
-     canvas         <- mkCanvas canWidth canHeight   -- The drawing area
+    canvas         <- mkCanvas canWidth canHeight   -- The drawing area
      
-
-     getBody window #+ [column [pure canvas]]
-
+    return window # set title "Minesweeper"
+     --getBody window #+ [column [pure canvas]]
+    
+    currentCoordinates  <- UI.span # set text "Coordinates: "
+    currentCell  <- UI.span # set text "Cell: "
      -- Styling
-     getBody window # set style [("backgroundColor","lightblue"),
+    getBody window # set style [("backgroundColor","lightblue"),
                                  ("textAlign","center")]
      --pure input # set style [("fontSize","14pt")]
-     setCanvas canvas
+    wrap <- UI.div #. "wrap"
+        # set style [("width","500px"),("height","500px"),("border","solid black 1px")]
+        # set (attr "tabindex") "1" -- allow key presses
+        #+ [element currentCell]
+        #+ [element currentCoordinates]
+    getBody window #+ [element wrap]
+    -- on UI.mousemove   wrap $ \c ->
+    --     element out # set text ("cell: " ++ show c)
+    on UI.mousedown      wrap $ \c ->
+        element currentCoordinates # set text ("cell: " ++ show c)
+    on UI.mousedown      wrap $ \c ->
+        element currentCell # set text ("cell: " ++ show (getCellCoordinates c))
+     --setCanvas canvas
+    let l1 = [(50,0), (50,500)]
+    let l2 = [(100,0), (100,500)]
+    let l3 = [(150,0), (150,500)]
+    let l4 = [(200,0), (200,500)]
+    let l5 = [(250,0), (250,500)]
+    let l6 = [(300,0), (300,500)]
+    let l7 = [(350,0), (350,500)]
+    let l8 = [(400,0), (400,500)]
+    let l9 = [(450,0), (450,500)]
+   -- let l10 = [(50,0), (50,500)]
+    path "black" l1 canvas
+    path "black" l2 canvas
+    path "black" l3 canvas
+    path "black" l4 canvas
+    path "black" l5 canvas
+    path "black" l6 canvas
+    path "black" l7 canvas
+    path "black" l8 canvas
+    path "black" l9 canvas
 
 setCanvas :: Element -> UI()
 setCanvas canvas = 
@@ -74,6 +108,7 @@ setCanvas canvas =
     path "black" l18 canvas
     path "black" l19 canvas
 
-
+getCellCoordinates :: (Double, Double) -> (Int,Int)
+getCellCoordinates (x,y) = ((round(x / 50)), round(y / 50))
 -- lineTo :: Point -> Canvas -> UI () 
 -- lineTo point canvas
