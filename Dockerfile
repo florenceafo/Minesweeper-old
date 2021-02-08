@@ -32,4 +32,4 @@ RUN cabal install --overwrite-policy=always
 #COPY --from=build /opt/build/bin .
 EXPOSE $PORT
 
-CMD ["/opt/minesweeper/start.sh", $PORT]
+CMD "/opt/minesweeper/start.sh"
