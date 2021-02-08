@@ -30,6 +30,6 @@ RUN cabal install --overwrite-policy=always
 #ENV PATH /opt/minesweeper
 #ENV PATH="/opt/gtk/bin:${PATH}"
 #COPY --from=build /opt/build/bin .
-EXPOSE 8023
+EXPOSE $PORT
 
-CMD ["/opt/minesweeper/start.sh", "8023"]
+CMD ["/opt/minesweeper/start.sh", $PORT]
